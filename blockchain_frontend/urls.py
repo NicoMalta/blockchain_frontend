@@ -19,8 +19,16 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from blockchain_frontend import views as main
+from tender import views as tender
+from medical_story import views as medical
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', main.index, name='index'),
+    path('', main.prehome, name='prehome'),
+
+    #Tender paths
+    path('tender', tender.index, name='index-tender'),
+
+    #Medical Story
+    path('medical', tender.index, name='index-medical')
 ] 

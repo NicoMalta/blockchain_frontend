@@ -1,0 +1,85 @@
+{% load static %}
+
+<html>
+	<head>
+		<title>Blockchain</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static "assets/css/main.css" %}" />
+		<noscript><link rel="stylesheet" href="{% static "assets/css/noscript.css" %}" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="logo">
+							<span class="icon fa-gem"></span>
+						</div>
+						<div class="content">
+							<div class="inner">
+								<h1>Blockchain implementations</h1>
+								<p>Select a demo of a blockchain implementations</p>
+								<p><a href="#help">How it's work?</a></p>
+							</div>
+						</div>
+						<nav>
+							<ul>
+								<li><a href="{% url 'index-tender' %}">Tenders</a></li>
+								<li><a href="{% url 'index-medical' %}">Medical Story</a></li>
+								<!--<li><a href="#elements">Elements</a></li>-->
+							</ul>
+						</nav>
+					</header>
+
+				<!-- Main -->
+					<div id="main">
+						<!-- Help -->
+							<article id="help">
+								<h2 class="major">Help</h2>
+								<span class="image main"><img src="{% static "images/pic03.jpg" %}" alt="" /></span>
+								<p>Select one implementations to see a prototype Dapps</p>
+							</article>
+
+						<!-- Login -->
+							<article id="account">
+								<h2 class="major">Login</h2>
+								<form method="post" action="#">
+									<div class="fields">
+										<div class="field">
+											<label for="message">Email</label>
+                                            <input type="text" name="email" id="email" />
+										</div>
+                                        <div class="field">
+											<label for="message">Password</label>
+                                            <input type="Password" name="password" id="password" />
+										</div>
+									</div>
+									<ul class="actions">
+										<li><input type="submit" value="Login" class="primary" /></li>
+                                        <li><input type="submit" value="Register" class="primary" /></li>
+									</ul>
+								</form>
+							</article>
+						</div>
+				<!-- Footer -->
+					<footer id="footer">
+						<p class="copyright">&copy; Final Work.</p>
+					</footer>
+
+			</div>
+
+		<!-- BG -->
+			<div id="bg"></div>
+
+		<!-- Scripts -->
+			<script src="{% static "assets/js/jquery.min.js" %}"></script>
+			<script src="{% static "assets/js/browser.min.js" %}"></script>
+			<script src="{% static "assets/js/breakpoints.min.js" %}"></script>
+			<script src="{% static "assets/js/util.js" %}"></script>
+			<script src="{% static "assets/js/main.js" %}"></script>
+
+	</body>
+</html>
