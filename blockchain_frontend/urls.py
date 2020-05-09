@@ -30,5 +30,5 @@ urlpatterns = [
     path('tender', tender.index, name='index-tender'),
 
     #Medical Story
-    path('medical', tender.index, name='index-medical')
+    path('medical', medical.index, name='index-medical')
 ] 

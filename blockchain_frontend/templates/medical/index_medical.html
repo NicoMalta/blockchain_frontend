@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %} <title>Tendering </title> {% endblock %}
+{% block title %} <title> Medical Story </title> {% endblock %}
 
 {% block sidebar %}
-    {% include 'components/_sidebar.html' %}
+    {% include 'components/_sidebar_medical.html' %}
+{% endblock %}
+
+{% block body %}
+    {% include 'medical/medical_body.html' %}
 {% endblock %}
