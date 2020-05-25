@@ -14,6 +14,7 @@ import os
 import django_heroku
 import mimetypes
 
+
 mimetypes.add_type("text/css", ".css", True)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -127,3 +128,4 @@ STATICFILES_DIRS = [
 STATIC_URL = '/static/'
 
 django_heroku.settings(locals())
+
