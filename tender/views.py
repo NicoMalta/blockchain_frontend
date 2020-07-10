@@ -1,3 +1,4 @@
+import datetime
 import pprint
 
 from django.shortcuts import render
@@ -24,33 +25,56 @@ def deploy_contract(w3, contract_interface):
     return address
 
 
-# Create your views here.
 def index(request):
+    return render(request, 'tender/index_tender.html')
+
+
+# Create your views here.
+def nose(request):
     # Solidity source code
     # compile_sol = compile_source_file('tender/tender.json')
     compiled_sol = compile_standard({
 
         "language": "Solidity",
         "sources": {
-            "Greeter.sol": {
+            "Tender.sol": {
                 "content": '''
-                     pragma solidity >0.0.0;
-    
-                     contract Greeter {
-                       string public greeting;
-    
-                       constructor() public {
-                           greeting = 'Hello';
-                       }
-    
-                       function setGreeting(string memory _greeting) public {
-                           greeting = _greeting;
-                       }
-    
-                       function greet() view public returns (string memory) {
-                           return greeting;
-                       }
-                     }
+                pragma solidity ^0.6.11;
+                pragma experimental ABIEncoderV2;
+                
+                contract Tender {
+                    struct Offer {
+                        address bidder;
+                        string offerHash;
+                        uint256 timestamp;
+                    }
+                
+                    uint public offersCount;
+                    Offer[] public submittedOffers;
+                    mapping (address => uint) public bidderToIndex; // to check who already submitted offers
+                    uint256 public dateEnd;
+                
+                    event OfferSubmitted(address indexed _bidder, string _offerHash);
+                
+                    constructor(uint256 _dateEnd) public {
+                        dateEnd = _dateEnd;
+                        offersCount = 0;
+                    }
+                
+                    function submitOffer(string memory offerHash) public {
+                        require(now < dateEnd);
+                
+                        offersCount++;
+                        bidderToIndex[msg.sender] = offersCount;
+                        submittedOffers.push(Offer(msg.sender, offerHash, now));
+                
+                        emit OfferSubmitted(msg.sender, offerHash);
+                    }
+                
+                    function getSubmittedOffers() public view returns (Offer[] memory) {
+                        return submittedOffers;
+                    }
+                }
                    '''
             }
         },
@@ -77,28 +101,35 @@ def index(request):
     w3.eth.defaultAccount = w3.eth.accounts[0]
 
     # get bytecode
-    bytecode = compiled_sol['contracts']['Greeter.sol']['Greeter']['evm']['bytecode']['object']
+    bytecode = compiled_sol['contracts']['Tender.sol']['Tender']['evm']['bytecode']['object']
 
     # get abi
-    abi = json.loads(compiled_sol['contracts']['Greeter.sol']['Greeter']['metadata'])['output']['abi']
+    abi = json.loads(compiled_sol['contracts']['Tender.sol']['Tender']['metadata'])['output']['abi']
 
-    Greeter = w3.eth.contract(abi=abi, bytecode=bytecode)
+    Tender = w3.eth.contract(abi=abi, bytecode=bytecode)
+
+    # Creating a datetime object so we can test.
+    deadline = datetime.datetime.now() + datetime.timedelta(days=1, hours=3)
+
+    # Converting a to string in the desired format (YYYYMMDD) using strftime
+    # and then to int.
+    deadline = int(deadline.strftime('%Y%m%d%H%M%S'))
 
     # Submit the transaction that deploys the contract
-    #  tx_hash = Greeter.constructor().transact()
+    # tx_hash = Tender.constructor(deadline).transact()
 
     # Wait for the transaction to be mined, and get the transaction receipt
-    #  tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+    # tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
 
-    greeter = w3.eth.contract(
-        address='0x266Ba82e0271546108C7601468F5D282842e7FaB',
+    tender = w3.eth.contract(
+        address="0x415CEB2d87309889971C7745DD370237c268673A",
         abi=abi
     )
 
-    print(greeter.functions.greet().call())
-    tx_hash = greeter.functions.setGreeting('Nihao').transact()
-    tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
-    print(greeter.functions.greet().call())
+    # print(greeter.functions.submiteOffer("probando").call())
+    tx_hash = tender.functions.submitOffer("tinchito").transact()
+    # tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+    print(tender.functions.getSubmittedOffers().call())
 
     return render(request, 'tender/index_tender.html')
 
