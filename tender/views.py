@@ -28,6 +28,8 @@ def deploy_contract(w3, contract_interface):
 def index(request):
     return render(request, 'tender/index_tender.html')
 
+#def submit_offer(request):
+
 
 # Create your views here.
 def nose(request):
@@ -94,6 +96,7 @@ def nose(request):
     })
 
     # web3.py instance
+    Web3.WebsocketProvider
     my_provider = Web3.HTTPProvider('http://localhost:8545')
     w3 = Web3(my_provider)
 
