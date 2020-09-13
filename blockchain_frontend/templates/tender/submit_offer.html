@@ -9,20 +9,22 @@
             <p>
                 Choose a file with offer and submit.
             </p>
-            <p>
-                <label for="file-upload" class="custom-file-upload">
-                    <i class="fas fa-file-upload"></i> Choose File
-                </label>
-                <input id="file-upload" type="file"/>
-            </p>
-            <p>
-                <a href="#" class="btn btn-primary btn-icon-split">
+            <form method="post" id="submit-offer-form" enctype="multipart/form-data">
+                {% csrf_token %}
+                <p>
+                    <label for="file" class="custom-file-upload">
+                        <i class="fas fa-file-upload"></i> Choose File
+                    </label>
+                    <input id="file" type="file" name="file"/>
+                </p>
+                <input type="submit" value="Submit offer">
+            <!--    <a href="" class="btn btn-primary btn-icon-split" onclick="document.getElementById('submit-offer-form').submit();">
                             <span class="icon text-white-50">
                               <i class="fas fa-flag"></i>
                             </span>
                     <span class="text">Submit Offer</span>
-                </a>
-            </p>
+                </a>-->
+            </form>
         </div>
     </div>
 {% endblock %}

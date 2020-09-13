@@ -15,20 +15,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.conf import settings
-from django.conf.urls.static import static
+from django.contrib.auth.decorators import login_required
 
 from blockchain_frontend import views as main
 from tender import views as tender
 from medical_story import views as medical
+from login import views as login
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', main.prehome, name='prehome'),
+    path('', login_required(main.prehome), name='prehome'),
 
-    #Tender paths
-    path('tender', tender.index, name='index-tender'),
+    # Tender paths
+    path('tender', login_required(tender.index), name='index-tender'),
 
-    #Medical Story
-    path('medical', medical.index, name='index-medical')
-] 
+    # Medical Story
+    path('medical', login_required(medical.index), name='index-medical'),
+
+    # Login
+    path('login', login.index, name='login')
+]

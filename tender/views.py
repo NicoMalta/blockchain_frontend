@@ -1,13 +1,13 @@
 import datetime
-import pprint
 
 from django.shortcuts import render
 import json
+import hashlib
 
-from web3 import Web3, HTTPProvider
+from web3 import Web3
 from solcx import compile_source, compile_standard
-from web3.contract import ConciseContract
-
+from tender.models import TenderFile
+from login.models import User
 
 def compile_source_file(file_path):
     with open(file_path, 'r') as f:
@@ -26,9 +26,29 @@ def deploy_contract(w3, contract_interface):
 
 
 def index(request):
+    #nose(request)
+    Web3.WebsocketProvider
+    #my_provider = Web3.HTTPProvider('http://localhost:8545')
+    #w3 = Web3(my_provider)
+    #cuentinha = w3.geth.personal.new_account("probando")
+    #print(cuentinha)
+
+    freds_department = u.employee.department
+    if request.method == 'POST':
+        submit_offer(request)
     return render(request, 'tender/index_tender.html')
 
-#def submit_offer(request):
+
+def submit_offer(request):
+    file_hash = hashlib.sha1()
+    file = request.FILES['file']
+    while chunk := file.read(8192):
+        file_hash.update(chunk)
+
+    tender = TenderFile()
+    tender.hash = file_hash.hexdigest()
+    tender.offer = file
+    tender.save()
 
 
 # Create your views here.
