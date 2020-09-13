@@ -32,8 +32,6 @@ def index(request):
     #w3 = Web3(my_provider)
     #cuentinha = w3.geth.personal.new_account("probando")
     #print(cuentinha)
-
-    freds_department = u.employee.department
     if request.method == 'POST':
         submit_offer(request)
     return render(request, 'tender/index_tender.html')
