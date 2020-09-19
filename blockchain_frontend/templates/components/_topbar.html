@@ -8,7 +8,9 @@
 
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">
-
+        {% if user.is_authenticated %}
+            {{ request.user }} |  <a href="{% url 'logout' %}">Logout</a>
+        {% endif %}
         <div class="topbar-divider d-none d-sm-block"></div>
 
     </ul>

@@ -33,13 +33,10 @@
 </head>
 <body>
 
-{{ form.username }}
-{{ form.password }}
-
 <div class="limiter">
     <div class="container-login100" style="background-image: url('{% static "login/images/bg-01.jpg" %}');">
         <div class="wrap-login100">
-            <form class="login100-form validate-form" action="{% url 'login' %}" method="post">
+            <form class="login100-form validate-form" action="{% url 'registration' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% load widget_tweaks %}
                 <span class="login100-form-logo">
@@ -47,36 +44,39 @@
 					</span>
 
                 <span class="login100-form-title p-b-34 p-t-27">
-						Log in
+						Sign Up
                 </span>
 
 
                 <div class="wrap-input100 validate-input" data-validate="Enter username">
-                    {% render_field form.username|append_attr:"class:input100" placeholder="Username" %}
+                    {% render_field register_form.username|append_attr:"class:input100" placeholder="Username" %}
                     <span class="focus-input100" data-placeholder="&#xf207;"></span>
                 </div>
 
                 <div class="wrap-input100 validate-input" data-validate="Enter password">
-                    {% render_field form.password|append_attr:"class:input100" placeholder="Password" %}
+                    {% render_field register_form.password1|append_attr:"class:input100" placeholder="Password" %}
                     <span class="focus-input100" data-placeholder="&#xf191;"></span>
                 </div>
 
-                <div class="contact100-form-checkbox">
-                    <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
-                    <label class="label-checkbox100" for="ckb1">
-                        Remember me
-                    </label>
+                <div class="wrap-input100 validate-input" data-validate="Enter password">
+                    {% render_field register_form.password2|append_attr:"class:input100" placeholder="Password" %}
+                    <span class="focus-input100" data-placeholder="&#xf191;"></span>
+                </div>
+
+                <div class="wrap-input100 validate-input" data-validate="Enter Address">
+                    {% render_field address_form.address|append_attr:"class:input100" placeholder="Address" %}
+                    <span class="focus-input100" data-placeholder="&#xf2c3;"></span>
                 </div>
 
                 <div class="container-login100-form-btn">
                     <button type="submit" class="login100-form-btn">
-                        Login
+                        Register
                     </button>
                 </div>
 
                 <div class="text-center p-t-90">
-                    <a class="txt1" href="#">
-                        Forgot Password?
+                    <a class="txt1" href="{% url 'login' %}">
+                        Login
                     </a>
                 </div>
             </form>

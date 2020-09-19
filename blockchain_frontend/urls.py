@@ -21,6 +21,7 @@ from blockchain_frontend import views as main
 from tender import views as tender
 from medical_story import views as medical
 from login import views as login
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,6 +33,8 @@ urlpatterns = [
     # Medical Story
     path('medical', login_required(medical.index), name='index-medical'),
 
-    # Login
-    path('login', login.index_login, name='login')
+    # Account
+    path('login', login.index_login, name='login'),
+    path('logout', auth_views.LogoutView.as_view(), name='logout'),
+    path('registration', login.registration, name='registration')
 ]

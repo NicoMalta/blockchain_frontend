@@ -27,10 +27,7 @@ def deploy_contract(w3, contract_interface):
 
 def index(request):
     #nose(request)
-    Web3.WebsocketProvider
-    #my_provider = Web3.HTTPProvider('http://localhost:8545')
-    #w3 = Web3(my_provider)
-    #cuentinha = w3.geth.personal.new_account("probando")
+
     #print(cuentinha)
     if request.method == 'POST':
         submit_offer(request)
