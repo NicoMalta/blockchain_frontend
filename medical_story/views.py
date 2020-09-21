@@ -112,8 +112,8 @@ def index(request):
     )
 
     # print(greeter.functions.submiteOffer("probando").call())
-    tx_hash = events.functions.addEvent("prueba2", deadline).transact()
-    tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
-    print(events.functions.listEvents(0, 2).call())
+   # tx_hash = events.functions.addEvent("prueba2", deadline).transact()
+   # tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+   # print(events.functions.listEvents(0, 2).call())
 
     return render(request, 'medical/index_medical.html')
