@@ -124,9 +124,10 @@ STATICFILES_DIRS = [
 
 STATIC_URL = '/static/'
 
+django_heroku.settings(locals())
+
 if os.environ.get('ENV') == "HEROKU":
     WEB3_URL = "url_heroku"
-    django_heroku.settings(locals())
 else:
     WEB3_URL = 'http://localhost:8545'
 
