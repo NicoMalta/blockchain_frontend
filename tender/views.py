@@ -37,8 +37,8 @@ def index(request):
 def submit_offer(request):
     file_hash = hashlib.sha1()
     file = request.FILES['file']
-    while chunk := file.read(8192):
-        file_hash.update(chunk)
+#    while chunk := file.read(8192):
+  #      file_hash.update(chunk)
 
     tender = TenderFile()
     tender.hash = file_hash.hexdigest()
