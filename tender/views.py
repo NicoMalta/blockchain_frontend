@@ -7,7 +7,8 @@ import hashlib
 from web3 import Web3
 from solcx import compile_source, compile_standard
 from tender.models import TenderFile
-from login.models import User
+from login.models import BlockchainAccount
+
 
 def compile_source_file(file_path):
     with open(file_path, 'r') as f:
@@ -26,9 +27,8 @@ def deploy_contract(w3, contract_interface):
 
 
 def index(request):
-    #nose(request)
+    account = request.user
 
-    #print(cuentinha)
     if request.method == 'POST':
         submit_offer(request)
     return render(request, 'tender/index_tender.html')
@@ -46,8 +46,7 @@ def submit_offer(request):
     tender.save()
 
 
-# Create your views here.
-def nose(request):
+def submit_to_blockchain(file_hash, address):
     # Solidity source code
     # compile_sol = compile_source_file('tender/tender.json')
     compiled_sol = compile_standard({
@@ -116,7 +115,7 @@ def nose(request):
     w3 = Web3(my_provider)
 
     # set pre-funded account as sender
-    w3.eth.defaultAccount = w3.eth.accounts[0]
+    w3.eth.defaultAccount = address
 
     # get bytecode
     bytecode = compiled_sol['contracts']['Tender.sol']['Tender']['evm']['bytecode']['object']
@@ -145,11 +144,9 @@ def nose(request):
     )
 
     # print(greeter.functions.submiteOffer("probando").call())
-    tx_hash = tender.functions.submitOffer("tinchito").transact()
+    # tx_hash = tender.functions.submitOffer("tinchito").transact()
     # tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
     print(tender.functions.getSubmittedOffers().call())
-
-    return render(request, 'tender/index_tender.html')
 
 
 def erase(request):
