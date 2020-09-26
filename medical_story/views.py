@@ -2,8 +2,8 @@ import json
 from datetime import datetime
 
 from django.shortcuts import render
+from medical_story.models import Medicine
 
-# Create your views here.
 from solcx import compile_standard
 from web3 import Web3
 
@@ -101,10 +101,10 @@ def index(request):
     deadline = int(deadline.strftime('%Y%m%d'))
 
     # Submit the transaction that deploys the contract
-    #tx_hash = Events.constructor().transact()
+    # tx_hash = Events.constructor().transact()
 
     # Wait for the transaction to be mined, and get the transaction receipt
-    #tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+    # tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
 
     events = w3.eth.contract(
         address="0x7760580c182a2e076C362a2Ad05C084C7d12A24c",
@@ -112,8 +112,27 @@ def index(request):
     )
 
     # print(greeter.functions.submiteOffer("probando").call())
-   # tx_hash = events.functions.addEvent("prueba2", deadline).transact()
-   # tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
-   # print(events.functions.listEvents(0, 2).call())
+    # tx_hash = events.functions.addEvent("prueba2", deadline).transact()
+    # tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+    # print(events.functions.listEvents(0, 2).call())
 
     return render(request, 'medical/index_medical.html')
+
+
+def create_medicine(request):
+    medicine = request.POST.get('medicine')
+    if medicine is not None:
+        new_medicine = Medicine()
+        new_medicine.name = medicine.name
+        new_medicine.description = medicine.description
+        new_medicine.category = medicine.category
+        
+        new_medicine.save()
+
+    return render(request, 'medical/index_medical.html')
+
+
+def medicine_index(request):
+    medicines = Medicine.objects.all()
+
+    return render(request, 'medical/index_medicine.html', {'medicines': medicines})

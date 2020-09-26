@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'widget_tweaks',
     'tender',
-    'login'
+    'login',
+    'medical_story'
 ]
 
 MIDDLEWARE = [

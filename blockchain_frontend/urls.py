@@ -32,6 +32,7 @@ urlpatterns = [
 
     # Medical Story
     path('medical', login_required(medical.index), name='index-medical'),
+    path('medicine', login_required(medical.medicine_index), name='index-medicine'),
 
     # Account
     path('login', login.index_login, name='login'),
