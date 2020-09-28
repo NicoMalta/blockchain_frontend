@@ -3,6 +3,7 @@ from datetime import datetime
 
 from django.shortcuts import render
 from medical_story.models import Medicine
+from django.contrib.auth.models import User
 
 from solcx import compile_standard
 from web3 import Web3
@@ -11,7 +12,6 @@ from web3 import Web3
 def index(request):
     # Solidity source code
     # compile_sol = compile_source_file('tender/tender.json')
-
 
     # print(greeter.functions.submiteOffer("probando").call())
     # tx_hash = events.functions.addEvent("prueba2", deadline).transact()
@@ -38,3 +38,9 @@ def medicine_index(request):
     medicines = Medicine.objects.all()
 
     return render(request, 'medical/index_medicine.html', {'medicines': medicines})
+
+
+def patient_index(request):
+    patients = User.objects.all()
+
+    return render(request, 'medical/index_patient.html', {'patients': patients})
