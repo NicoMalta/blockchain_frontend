@@ -5,6 +5,8 @@ from web3 import Web3
 from login.forms import BlockchainAccountForm
 from django.shortcuts import render, redirect
 
+from mnemonic import Mnemonic
+
 
 def index_login(request):
     form = AuthenticationForm()
@@ -28,6 +30,8 @@ def logout_view(request):
 
 
 def registration(request):
+    mnemo = Mnemonic("english")
+    words = mnemo.generate(strength=128)
     if request.method == 'POST':
         register_form = UserCreationForm(data=request.POST)
         address_form = BlockchainAccountForm(data=request.POST)
@@ -45,9 +49,10 @@ def registration(request):
             return render(request, 'login/login.html', {'form': form})
     else:
         register_form = UserCreationForm()
-        address_form = BlockchainAccountForm()
+        address_form = BlockchainAccountForm(initial={'address': words})
+
         return render(request, 'login/registration.html',
-                      {'register_form': register_form, 'address_form': address_form})
+                      {'register_form': register_form, 'address_form': address_form, 'words': words})
 
 
 def create_blockchain_account(address):

@@ -27,8 +27,6 @@ def deploy_contract(w3, contract_interface):
 
 
 def index(request):
-    account = request.user
-
     if request.method == 'POST':
         submit_offer(request)
     return render(request, 'tender/index_tender.html')
@@ -37,13 +35,14 @@ def index(request):
 def submit_offer(request):
     file_hash = hashlib.sha1()
     file = request.FILES['file']
-#    while chunk := file.read(8192):
-  #      file_hash.update(chunk)
 
     tender = TenderFile()
     tender.hash = file_hash.hexdigest()
     tender.offer = file
     tender.save()
+
+    account = request.user
+    submit_to_blockchain(tender.hash, account.blockchainaccount.address)
 
 
 def submit_to_blockchain(file_hash, address):
@@ -55,42 +54,42 @@ def submit_to_blockchain(file_hash, address):
         "sources": {
             "Tender.sol": {
                 "content": '''
-                pragma solidity ^0.6.11;
-                pragma experimental ABIEncoderV2;
-                
-                contract Tender {
-                    struct Offer {
-                        address bidder;
-                        string offerHash;
-                        uint256 timestamp;
+                    pragma solidity >=0.0.0;
+                    pragma experimental ABIEncoderV2;
+                    
+                    contract Tender {
+                        struct Offer {
+                            string bidder;
+                            string offerHash;
+                            uint256 timestamp;
+                        }
+                    
+                        uint public offersCount;
+                        Offer[] public submittedOffers;
+                        mapping (string => uint) public bidderToIndex; // to check who already submitted offers
+                        uint256 public dateEnd;
+                    
+                        event OfferSubmitted(string indexed _bidder, string _offerHash);
+                    
+                        constructor(uint256 _dateEnd) public {
+                            dateEnd = _dateEnd;
+                            offersCount = 0;
+                        }
+                    
+                        function submitOffer(string memory bidder, string memory offerHash) public {
+                            require(now < dateEnd);
+                    
+                            offersCount++;
+                            bidderToIndex[bidder] = offersCount;
+                            submittedOffers.push(Offer(bidder, offerHash, now));
+                    
+                            emit OfferSubmitted(bidder, offerHash);
+                        }
+                    
+                        function getSubmittedOffers() public view returns (Offer[] memory) {
+                            return submittedOffers;
+                        }
                     }
-                
-                    uint public offersCount;
-                    Offer[] public submittedOffers;
-                    mapping (address => uint) public bidderToIndex; // to check who already submitted offers
-                    uint256 public dateEnd;
-                
-                    event OfferSubmitted(address indexed _bidder, string _offerHash);
-                
-                    constructor(uint256 _dateEnd) public {
-                        dateEnd = _dateEnd;
-                        offersCount = 0;
-                    }
-                
-                    function submitOffer(string memory offerHash) public {
-                        require(now < dateEnd);
-                
-                        offersCount++;
-                        bidderToIndex[msg.sender] = offersCount;
-                        submittedOffers.push(Offer(msg.sender, offerHash, now));
-                
-                        emit OfferSubmitted(msg.sender, offerHash);
-                    }
-                
-                    function getSubmittedOffers() public view returns (Offer[] memory) {
-                        return submittedOffers;
-                    }
-                }
                    '''
             }
         },
@@ -115,36 +114,36 @@ def submit_to_blockchain(file_hash, address):
     w3 = Web3(my_provider)
 
     # set pre-funded account as sender
-    w3.eth.defaultAccount = address
+    w3.eth.defaultAccount = w3.eth.accounts[0]
 
     # get bytecode
-    bytecode = compiled_sol['contracts']['Tender.sol']['Tender']['evm']['bytecode']['object']
+    #bytecode = compiled_sol['contracts']['Tender.sol']['Tender']['evm']['bytecode']['object']
 
     # get abi
     abi = json.loads(compiled_sol['contracts']['Tender.sol']['Tender']['metadata'])['output']['abi']
 
-    Tender = w3.eth.contract(abi=abi, bytecode=bytecode)
+    #Tender = w3.eth.contract(abi=abi, bytecode=bytecode)
 
     # Creating a datetime object so we can test.
-    deadline = datetime.datetime.now() + datetime.timedelta(days=1, hours=3)
+    #deadline = datetime.datetime.now() + datetime.timedelta(days=1, hours=3)
 
     # Converting a to string in the desired format (YYYYMMDD) using strftime
     # and then to int.
-    deadline = int(deadline.strftime('%Y%m%d%H%M%S'))
+    #deadline = int(deadline.strftime('%Y%m%d%H%M%S'))
 
     # Submit the transaction that deploys the contract
-    # tx_hash = Tender.constructor(deadline).transact()
+    #tx_hash = Tender.constructor(deadline).transact()
 
     # Wait for the transaction to be mined, and get the transaction receipt
-    # tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+    #tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
 
     tender = w3.eth.contract(
-        address="0x415CEB2d87309889971C7745DD370237c268673A",
+        address="0x2644f95f8D779d44f90668c586FbF51827A5d1fa",
         abi=abi
     )
 
     # print(greeter.functions.submiteOffer("probando").call())
-    # tx_hash = tender.functions.submitOffer("tinchito").transact()
+    tx_hash = tender.functions.submitOffer(address, file_hash).transact()
     # tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
     print(tender.functions.getSubmittedOffers().call())
 

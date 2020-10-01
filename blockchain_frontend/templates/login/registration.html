@@ -63,8 +63,8 @@
                     <span class="focus-input100" data-placeholder="&#xf191;"></span>
                 </div>
 
-                <div class="wrap-input100 validate-input" data-validate="Enter Address">
-                    {% render_field address_form.address|append_attr:"class:input100" placeholder="Address" %}
+                <div class="wrap-input100">
+                    {% render_field address_form.address|append_attr:"class:input100 disabled" placeholder=words %}
                     <span class="focus-input100" data-placeholder="&#xf2c3;"></span>
                 </div>
 
