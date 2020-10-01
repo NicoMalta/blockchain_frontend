@@ -3,6 +3,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 
 from login.models import BlockchainAccount
+from medical_story.models import Medicine
 
 
 # Register your models here.
@@ -20,3 +21,4 @@ class UserAdmin(BaseUserAdmin):
 # Re-register UserAdmin
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
+admin.site.register(Medicine)
