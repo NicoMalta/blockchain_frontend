@@ -11,8 +11,11 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" href="index.html">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
+        <a class="nav-link" href="{% url 'index-tender' %}">
+            <i class="fas fa-building"></i>
+            <span>Open Tendering</span></a>
+        <a class="nav-link" href="{% url 'index-tender' %}">
+            <i class="fas fa-handshake"></i>
             <span>Upload Tender</span></a>
     </li>
 
