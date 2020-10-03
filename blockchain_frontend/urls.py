@@ -35,6 +35,7 @@ urlpatterns = [
     path('medicine', login_required(medical.medicine_index), name='index-medicine'),
     path('patient', login_required(medical.patient_index), name='index-patient'),
     path('history', login_required(medical.history_index), name='index-history'),
+    path('profile', login_required(medical.profile_index), name='index-profile'),
 
     # Account
     path('login', login.index_login, name='login'),

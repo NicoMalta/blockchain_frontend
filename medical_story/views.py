@@ -41,11 +41,14 @@ def medicine_index(request):
 
 
 def patient_index(request):
-    patients = User.objects.all()
+    patients = User.objects.filter(groups__name='Patients')
 
     return render(request, 'medical/index_patient.html', {'patients': patients})
 
 
 def history_index(request):
-
     return render(request, 'medical/index_history.html')
+
+
+def profile_index(request):
+    return render(request, 'medical/index_profile.html')
