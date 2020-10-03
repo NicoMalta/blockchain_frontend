@@ -22,6 +22,10 @@ def index(request):
     return render(request, 'tender/index_tender.html', {'offers': offers})
 
 
+def open_tendering(request):
+    return render(request, 'tender/open_tendering.html')
+
+
 def submit_offer(request):
     file_hash = hashlib.sha1()
     file = request.FILES['file']
