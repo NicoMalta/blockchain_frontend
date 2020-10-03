@@ -28,6 +28,7 @@ urlpatterns = [
     path('', login_required(main.prehome), name='prehome'),
 
     # Tender paths
+    path('open_tendering', login_required(tender.open_tendering), name='open-tendering'),
     path('tender', login_required(tender.index), name='index-tender'),
 
     # Medical Story

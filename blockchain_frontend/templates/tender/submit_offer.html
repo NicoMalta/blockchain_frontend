@@ -17,14 +17,19 @@
                     </label>
                     <input id="file" type="file" name="file"/>
                 </p>
+                <p>
+                    <label id="selected_file_label">Selected file: </label>
+                </p>
                 <input type="submit" value="Submit offer">
-            <!--    <a href="" class="btn btn-primary btn-icon-split" onclick="document.getElementById('submit-offer-form').submit();">
-                            <span class="icon text-white-50">
-                              <i class="fas fa-flag"></i>
-                            </span>
-                    <span class="text">Submit Offer</span>
-                </a>-->
             </form>
         </div>
     </div>
 {% endblock %}
+
+<script>
+    document.getElementById('file').onchange = function () {
+        var str = 'Selected file: ' + this.value
+        document.getElementById('selected_file_label').innerHTML = str.split("C:\\fakepath\\").pop()
+    };
+
+</script>

@@ -1,3 +1,4 @@
 from django.contrib import admin
+from tender.models import OpenTendering
 
-# Register your models here.
+admin.site.register(OpenTendering)
