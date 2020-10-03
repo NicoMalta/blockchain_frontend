@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} <title> Medical Story </title> {% endblock %}
+
+{% block sidebar %}
+    {% include 'components/_sidebar_medical.html' %}
+{% endblock %}
+
+{% block body %}
+    <!-- Main Content -->
+    <div id="content">
+
+        {% include 'components/_topbar.html' %}
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Medical Histories</h6>
+                </div>
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <table class="table table-bordered dataTable" id="dataTable" width="100%"
+                                           cellspacing="0" role="grid" aria-describedby="dataTable_info"
+                                           style="width: 100%;">
+                                        <thead>
+                                        <tr role="row">
+                                            <th class="sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1"
+                                                colspan="1" aria-sort="ascending"
+                                                aria-label="Name: activate to sort column descending"
+                                                style="width: 100px;">Name
+                                            </th>
+                                            <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
+                                                colspan="1" aria-label="Position: activate to sort column ascending"
+                                                style="width: 157px;">Last Name
+                                            </th>
+                                            <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
+                                                colspan="1" aria-label="Position: activate to sort column ascending"
+                                                style="width: 157px;">Description
+                                            </th>
+                                            <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
+                                                colspan="1" aria-label="Position: activate to sort column ascending"
+                                                style="width: 157px;">Date
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <a href="#" class="btn btn-success btn-icon-split ml-3 mb-3">
+                            <span class="text">New History</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+
+    </div>
+    <!-- End of Main Content -->
+
+    <!-- Footer -->
+    {% block footer_tender %}
+        {% include 'components/_footer.html' %}
+    {% endblock %}
+    <!-- End of Footer -->
+
+{% endblock %}
+
+{% block body_tender %}
+
+{% endblock %}

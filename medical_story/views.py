@@ -44,3 +44,8 @@ def patient_index(request):
     patients = User.objects.all()
 
     return render(request, 'medical/index_patient.html', {'patients': patients})
+
+
+def history_index(request):
+
+    return render(request, 'medical/index_history.html')
