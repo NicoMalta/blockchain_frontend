@@ -1,45 +1,80 @@
 from datetime import datetime
 
-from django.shortcuts import render
+from django.utils import timezone
+from django.shortcuts import render, redirect
 import json
-import hashlib
 
 from web3 import Web3
-from solcx import compile_source, compile_standard
-from tender.models import TenderFile
+from solcx import compile_standard
+from tender.models import TenderFile, OpenTendering
 from login.models import User
+from tender.forms import OpenTenderingForm
 
 
 def index(request):
     offers = []
-    for offer in get_offers(request):
+    last_tender = OpenTendering.objects.last()
+    for offer in get_offers(request, last_tender.contract_address):
         user = User.objects.filter(blockchainaccount__address=offer[0])[0].username
-        file = TenderFile.objects.filter(hash=offer[1])[0].offer
+        file = TenderFile.objects.filter(hash=str(offer[1]))[0].offer
         submitted_date = datetime.fromtimestamp(offer[2])
         offers.append([user, file, submitted_date])
     if request.method == 'POST':
-        submit_offer(request)
-    return render(request, 'tender/index_tender.html', {'offers': offers})
+        submit_offer(request, last_tender.contract_address)
+    return render(request, 'tender/index_tender.html', {'offers': offers, 'open_tender': last_tender})
 
 
 def open_tendering(request):
-    return render(request, 'tender/open_tendering.html')
+    open_tendering_form = OpenTenderingForm()
+    last_tender = OpenTendering.objects.last()
+    if not last_tender:
+        if last_tender.due_date > timezone.now():
+            open_tendering_form.fields['name'].disabled = True
+            open_tendering_form.fields['description'].disabled = True
+            open_tendering_form.fields['due_date'].disabled = True
+    if request.method == 'POST':
+        open_tendering_form = OpenTenderingForm(data=request.POST)
+        if open_tendering_form.is_valid():
+            w3 = get_provider()
+            w3.eth.defaultAccount = w3.eth.accounts[0]
+
+            compiled_sol = get_compiled_tender()
+
+            bytecode = compiled_sol['contracts']['Tender.sol']['Tender']['evm']['bytecode']['object']
+            abi = json.loads(compiled_sol['contracts']['Tender.sol']['Tender']['metadata'])['output']['abi']
+
+            tender = w3.eth.contract(abi=abi, bytecode=bytecode)
+
+            deadline = open_tendering_form.cleaned_data['due_date']
+            deadline = int(deadline.strftime('%Y%m%d%H%M%S'))
+
+            tx_hash = tender.constructor(deadline).transact()
+
+            tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+
+            model = OpenTendering()
+            model.name = open_tendering_form.cleaned_data['name']
+            model.description = open_tendering_form.cleaned_data['description']
+            model.due_date = open_tendering_form.cleaned_data['due_date']
+            model.contract_address = tx_receipt.contractAddress
+            model.save()
+
+            return redirect('/tender')
+    return render(request, 'tender/open_tendering.html', {'form': open_tendering_form})
 
 
-def submit_offer(request):
-    file_hash = hashlib.sha1()
+def submit_offer(request, contract_address):
     file = request.FILES['file']
 
     tender = TenderFile()
-    tender.hash = file_hash.hexdigest()
     tender.offer = file
     tender.save()
 
     account = request.user
-    submit_to_blockchain(tender.hash, account.blockchainaccount.address)
+    submit_to_blockchain(tender.hash, account.blockchainaccount.address, contract_address)
 
 
-def submit_to_blockchain(file_hash, address):
+def submit_to_blockchain(file_hash, address, contract_address):
     w3 = get_provider()
     w3.eth.defaultAccount = w3.eth.accounts[0]
 
@@ -48,33 +83,18 @@ def submit_to_blockchain(file_hash, address):
     # get abi
     abi = json.loads(compiled_sol['contracts']['Tender.sol']['Tender']['metadata'])['output']['abi']
 
-    # Tender = w3.eth.contract(abi=abi, bytecode=bytecode)
-
-    # Creating a datetime object so we can test.
-    # deadline = datetime.datetime.now() + datetime.timedelta(days=1, hours=3)
-
-    # Converting a to string in the desired format (YYYYMMDD) using strftime
-    # and then to int.
-    # deadline = int(deadline.strftime('%Y%m%d%H%M%S'))
-
-    # Submit the transaction that deploys the contract
-    # tx_hash = Tender.constructor(deadline).transact()
-
-    # Wait for the transaction to be mined, and get the transaction receipt
-    # tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
-
     tender = w3.eth.contract(
-        address="0x2644f95f8D779d44f90668c586FbF51827A5d1fa",
+        address=contract_address,
         abi=abi
     )
 
     # print(greeter.functions.submiteOffer("probando").call())
-    tx_hash = tender.functions.submitOffer(address, file_hash).transact()
+    tx_hash = tender.functions.submitOffer(address, str(file_hash)).transact()
     # tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
     print(tender.functions.getSubmittedOffers().call())
 
 
-def get_offers(request):
+def get_offers(request, contract_address):
     w3 = get_provider()
     w3.eth.defaultAccount = w3.eth.accounts[0]
 
@@ -82,7 +102,7 @@ def get_offers(request):
     abi = json.loads(compiled_sol['contracts']['Tender.sol']['Tender']['metadata'])['output']['abi']
 
     tender = w3.eth.contract(
-        address="0x2644f95f8D779d44f90668c586FbF51827A5d1fa",
+        address=contract_address,
         abi=abi
     )
 
