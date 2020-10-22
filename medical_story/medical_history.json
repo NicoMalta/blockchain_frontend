@@ -1,0 +1,229 @@
+[
+	{
+		"inputs": [
+			{
+				"internalType": "int256",
+				"name": "patient",
+				"type": "int256"
+			}
+		],
+		"name": "getByPatient",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "int256",
+						"name": "patient",
+						"type": "int256"
+					},
+					{
+						"internalType": "int256",
+						"name": "doctor",
+						"type": "int256"
+					},
+					{
+						"internalType": "string",
+						"name": "diagnostic",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "place",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "description",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "receta",
+						"type": "string"
+					}
+				],
+				"internalType": "struct HistoryMedical.History[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "int256",
+				"name": "patient",
+				"type": "int256"
+			},
+			{
+				"internalType": "int256",
+				"name": "doctor",
+				"type": "int256"
+			},
+			{
+				"internalType": "string",
+				"name": "diagnostic",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "place",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "description",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "receta",
+				"type": "string"
+			}
+		],
+		"name": "submitHistory",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getSubmittedHistory",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "int256",
+						"name": "patient",
+						"type": "int256"
+					},
+					{
+						"internalType": "int256",
+						"name": "doctor",
+						"type": "int256"
+					},
+					{
+						"internalType": "string",
+						"name": "diagnostic",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "place",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "description",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "receta",
+						"type": "string"
+					}
+				],
+				"internalType": "struct HistoryMedical.History[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "int256",
+				"name": "",
+				"type": "int256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "historyByPatient",
+		"outputs": [
+			{
+				"internalType": "int256",
+				"name": "patient",
+				"type": "int256"
+			},
+			{
+				"internalType": "int256",
+				"name": "doctor",
+				"type": "int256"
+			},
+			{
+				"internalType": "string",
+				"name": "diagnostic",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "place",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "description",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "receta",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "submittedHistory",
+		"outputs": [
+			{
+				"internalType": "int256",
+				"name": "patient",
+				"type": "int256"
+			},
+			{
+				"internalType": "int256",
+				"name": "doctor",
+				"type": "int256"
+			},
+			{
+				"internalType": "string",
+				"name": "diagnostic",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "place",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "description",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "receta",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
