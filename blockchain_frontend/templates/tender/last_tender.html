@@ -1,0 +1,19 @@
+{% load static %}
+
+{% block submit_offer %}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="row">
+                <h6 class="m-0 font-weight-bold text-primary"
+                    style="text-align: center;">{{ open_tender.due_date|date:"M d, Y" }}</h6>
+            </div>
+        </div>
+        <div class="card-body" style="text-align: center;">
+            <p>
+                <label class="m-0 font-weight-bold "
+                       style="text-align: center;">{{ open_tender.name }}</label>
+            </p>
+            <label style="text-align: center;">  {{ open_tender.description }}</label>
+        </div>
+    </div>
+{% endblock %}

@@ -8,20 +8,38 @@
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
-            <!-- Content Row -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Open new tender</h6>
+                </div>
 
+                <div class="card-body" style="text-align: center;">
+                    <form method="post" action="{% url 'open-tendering' %}">
+                        {% csrf_token %}
+                        {% load widget_tweaks %}
+                        <div class="form-group">
+                            {% render_field form.name|append_attr:"class:form-control form-control-user" placeholder="Tender name" %}
+                        </div>
+                        <div class="form-group">
+                            {% render_field form.description|append_attr:"class:form-control form-control-user" placeholder="Description" %}
+                        </div>
+                        <div class="form-group">
+                            Select due date
+                            {% render_field form.due_date|append_attr:"class:form-control form-control-user" placeholder="Choose date" %}
+                        </div>
+                        <input type="submit" class="btn btn-primary" value="Open">
+                    </form>
+                </div>
+            </div>
 
         </div>
-        <!-- /.container-fluid -->
+        <!-- End of Main Content -->
 
-    </div>
-    <!-- End of Main Content -->
-
-    <!-- Footer -->
-    {% block footer_tender %}
-        {% include 'components/_footer.html' %}
-    {% endblock %}
-    <!-- End of Footer -->
+        <!-- Footer -->
+        {% block footer_tender %}
+            {% include 'components/_footer.html' %}
+        {% endblock %}
+        <!-- End of Footer -->
 
     </div>
     <!-- End of Content Wrapper -->

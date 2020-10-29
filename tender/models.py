@@ -1,9 +1,11 @@
+import uuid
+
 from django.db import models
 
 
 # Create your models here.
 class TenderFile(models.Model):
-    hash = models.CharField(max_length=200)
+    hash = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     offer = models.FileField()
 
     def __str__(self):
