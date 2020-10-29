@@ -2,24 +2,24 @@
 	{
 		"inputs": [
 			{
-				"internalType": "int256",
-				"name": "patient",
-				"type": "int256"
+				"internalType": "string",
+				"name": "doctor",
+				"type": "string"
 			}
 		],
-		"name": "getByPatient",
+		"name": "getByDoctor",
 		"outputs": [
 			{
 				"components": [
 					{
-						"internalType": "int256",
+						"internalType": "string",
 						"name": "patient",
-						"type": "int256"
+						"type": "string"
 					},
 					{
-						"internalType": "int256",
+						"internalType": "string",
 						"name": "doctor",
-						"type": "int256"
+						"type": "string"
 					},
 					{
 						"internalType": "string",
@@ -37,8 +37,13 @@
 						"type": "string"
 					},
 					{
+						"internalType": "string[]",
+						"name": "medicines",
+						"type": "string[]"
+					},
+					{
 						"internalType": "string",
-						"name": "receta",
+						"name": "date",
 						"type": "string"
 					}
 				],
@@ -53,38 +58,56 @@
 	{
 		"inputs": [
 			{
-				"internalType": "int256",
+				"internalType": "string",
 				"name": "patient",
-				"type": "int256"
-			},
-			{
-				"internalType": "int256",
-				"name": "doctor",
-				"type": "int256"
-			},
-			{
-				"internalType": "string",
-				"name": "diagnostic",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "place",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "description",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "receta",
 				"type": "string"
 			}
 		],
-		"name": "submitHistory",
-		"outputs": [],
+		"name": "getByPatient",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "patient",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "doctor",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "diagnostic",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "place",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "description",
+						"type": "string"
+					},
+					{
+						"internalType": "string[]",
+						"name": "medicines",
+						"type": "string[]"
+					},
+					{
+						"internalType": "string",
+						"name": "date",
+						"type": "string"
+					}
+				],
+				"internalType": "struct HistoryMedical.History[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
@@ -95,14 +118,14 @@
 			{
 				"components": [
 					{
-						"internalType": "int256",
+						"internalType": "string",
 						"name": "patient",
-						"type": "int256"
+						"type": "string"
 					},
 					{
-						"internalType": "int256",
+						"internalType": "string",
 						"name": "doctor",
-						"type": "int256"
+						"type": "string"
 					},
 					{
 						"internalType": "string",
@@ -120,8 +143,13 @@
 						"type": "string"
 					},
 					{
+						"internalType": "string[]",
+						"name": "medicines",
+						"type": "string[]"
+					},
+					{
 						"internalType": "string",
-						"name": "receta",
+						"name": "date",
 						"type": "string"
 					}
 				],
@@ -136,9 +164,9 @@
 	{
 		"inputs": [
 			{
-				"internalType": "int256",
+				"internalType": "string",
 				"name": "",
-				"type": "int256"
+				"type": "string"
 			},
 			{
 				"internalType": "uint256",
@@ -146,17 +174,17 @@
 				"type": "uint256"
 			}
 		],
-		"name": "historyByPatient",
+		"name": "historyByDoctor",
 		"outputs": [
 			{
-				"internalType": "int256",
+				"internalType": "string",
 				"name": "patient",
-				"type": "int256"
+				"type": "string"
 			},
 			{
-				"internalType": "int256",
+				"internalType": "string",
 				"name": "doctor",
-				"type": "int256"
+				"type": "string"
 			},
 			{
 				"internalType": "string",
@@ -175,11 +203,103 @@
 			},
 			{
 				"internalType": "string",
-				"name": "receta",
+				"name": "date",
 				"type": "string"
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "historyByPatient",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "patient",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "doctor",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "diagnostic",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "place",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "description",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "date",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "patient",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "doctor",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "diagnostic",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "place",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "description",
+				"type": "string"
+			},
+			{
+				"internalType": "string[]",
+				"name": "medicines",
+				"type": "string[]"
+			},
+			{
+				"internalType": "string",
+				"name": "date",
+				"type": "string"
+			}
+		],
+		"name": "submitHistory",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -193,14 +313,14 @@
 		"name": "submittedHistory",
 		"outputs": [
 			{
-				"internalType": "int256",
+				"internalType": "string",
 				"name": "patient",
-				"type": "int256"
+				"type": "string"
 			},
 			{
-				"internalType": "int256",
+				"internalType": "string",
 				"name": "doctor",
-				"type": "int256"
+				"type": "string"
 			},
 			{
 				"internalType": "string",
@@ -219,7 +339,7 @@
 			},
 			{
 				"internalType": "string",
-				"name": "receta",
+				"name": "date",
 				"type": "string"
 			}
 		],

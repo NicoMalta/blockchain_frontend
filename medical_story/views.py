@@ -4,20 +4,18 @@ from datetime import datetime
 from django.shortcuts import render
 from medical_story.models import Medicine
 from django.contrib.auth.models import User
+from login.models import BlockchainAccount
+from django import template
+from django.contrib.auth.models import Group
 
 from solcx import compile_standard
 from web3 import Web3
+from medical_story.forms import HistoryForm
+
+register = template.Library()
 
 
 def index(request):
-    # Solidity source code
-    # compile_sol = compile_source_file('tender/tender.json')
-
-    # print(greeter.functions.submiteOffer("probando").call())
-    # tx_hash = events.functions.addEvent("prueba2", deadline).transact()
-    # tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
-    # print(events.functions.listEvents(0, 2).call())
-
     return render(request, 'medical/index_medical.html')
 
 
@@ -47,7 +45,15 @@ def patient_index(request):
 
 
 def history_index(request):
-    submit_to_blockchain()
+    if request.method == "POST":
+        form = HistoryForm(request.POST)
+        if form.is_valid():
+            # patient = User.objects.filter(dni=form.dni)
+            # patient_account = BlockchainAccount.objects.filter(user=patient)
+
+            doctor_account = BlockchainAccount.objects.filter(user=request.user)
+            submit_to_blockchain(form['dni'].value(), 12, "doctor_account.address", form['diagnostic'].value(),
+                                 form['locality'].value())
 
     w3 = get_provider()
     w3.eth.defaultAccount = w3.eth.accounts[0]
@@ -61,9 +67,10 @@ def history_index(request):
         abi=abi
     )
 
-    histories = history.functions.getByPatient(1).call()
+    histories = history.functions.getByPatient(2).call()
+    history_form = HistoryForm()
 
-    return render(request, 'medical/index_history.html', {'histories': histories})
+    return render(request, 'medical/index_history.html', {'histories': histories, 'history_form': history_form})
 
 
 def profile_index(request):
@@ -81,30 +88,36 @@ def get_compiled_medical_history():
                     pragma experimental ABIEncoderV2;
                     
                     contract HistoryMedical {
-                        
+    
                         struct History {
-                            int  patient;
-                            int  doctor;
+                            string  patient;
+                            string  doctor;
                             string  diagnostic;
                             string  place;
                             string  description;
-                            string  receta;
+                            string[]  medicines;
+                            string date;
                         }
                         
-                        
+   
                         History[] public submittedHistory;
-                        mapping (int => History[]) public historyByPatient;
+                        mapping (string => History[]) public historyByPatient;
+                        mapping (string => History[]) public historyByDoctor;
                     
                     
-                        function submitHistory( int  patient,  int  doctor, string memory diagnostic,  string memory place, string memory description, string memory receta) public {
-                            History memory history = History(patient, doctor, diagnostic, place, description, receta);    
+                        function submitHistory(string memory patient, string memory doctor, string memory diagnostic, string memory place, string memory description, string[] memory medicines, string memory date) public {
+                            History memory history = History(patient, doctor, diagnostic, place, description, medicines, date);    
                             
                             submittedHistory.push(history);
                             
-                            History[] storage allHistory = historyByPatient[patient];
-                            allHistory.push(history);
+                            History[] storage allHistoryByPatient = historyByPatient[patient];
+                            History[] storage allHistoryByDoctor = historyByDoctor[doctor];
+                        
+                            allHistoryByPatient.push(history);
+                            allHistoryByDoctor.push(history);
                             
-                            historyByPatient[patient] = allHistory;
+                            historyByPatient[patient] = allHistoryByPatient;
+                            historyByDoctor[doctor] = allHistoryByDoctor;
                         }
                         
                         
@@ -113,8 +126,12 @@ def get_compiled_medical_history():
                         }
                         
                     
-                        function getByPatient(int patient) public returns (History[] memory){
+                        function getByPatient(string memory patient) public returns (History[] memory){
                             return historyByPatient[patient];
+                        }
+                        
+                        function getByDoctor(string memory doctor) public returns (History[] memory){
+                            return historyByDoctor[doctor];
                         }
                     }
 
@@ -142,7 +159,7 @@ def get_provider():
     return Web3(my_provider)
 
 
-def submit_to_blockchain():
+def submit_to_blockchain(dni, patient_address, doctor_address, diagnostic, locality):
     w3 = get_provider()
     w3.eth.defaultAccount = w3.eth.accounts[0]
 
@@ -155,9 +172,14 @@ def submit_to_blockchain():
         abi=abi
     )
 
-    #history.functions.submitHistory(2, 123, "probando", "probando", "probando", "probando").transact()
+    history.functions.submitHistory(2, 2, "probando", "probando", diagnostic, locality).transact()
 
-    #print(history.functions.getSubmittedHistory().call())
 
-    #print(history.functions.getByPatient(1).call())
-
+@register.filter(name='has_group')
+def has_group(user, group_name):
+    group = Group.objects.filter(name=group_name)
+    if group:
+        group = group.first()
+        return group in user.groups.all()
+    else:
+        return False

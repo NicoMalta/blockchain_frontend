@@ -20,6 +20,8 @@
     </li>
 
     <!-- Divider -->
+    {% if user.groups.all.0.name == 'Doctors' %}
+
     <hr class="sidebar-divider">
 
     <!-- Heading -->
@@ -42,6 +44,8 @@
             <span>Medicines</span>
         </a>
     </li>
+
+    {% endif %}
 
     <!-- Divider -->
     <hr class="sidebar-divider">
